@@ -46,7 +46,7 @@ func (uc *userController) LogIn(c echo.Context) error {
 	}
 	tokenString, err := uc.uu.Login(user)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, error.Error())
+		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	cookie := new(http.Cookie)
 	cookie.Name = "token"
