@@ -1,3 +1,5 @@
+//外側の変更が内側に影響しないらしい。
+
 package usecase
 
 import (
@@ -5,8 +7,7 @@ import (
 	"go-rest-api/repository"
 	"os"
 	"time"
-
-	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -24,7 +25,7 @@ func NewUserUsecase(ur repository.IUserRepository) IUserUsecase {
 }
 
 func (uu *userUsecase) SignUp(user model.User) (model.UserResposen, error){
-	hash, err != bcrypt.GenerateFromPassword([]byte(user.user.Password),10)
+	hash, err := bcrypt.GenerateFromPassword([]byte(user.user.Password),10)
 	if err!= nil{
 		return model.UserResposen{}, err
 	}
@@ -40,11 +41,11 @@ func (uu *userUsecase) SignUp(user model.User) (model.UserResposen, error){
 }
 
 func (uu *userUsecase) Login(user model.User) (string, error){
-	storeuser := model.User()
-	if err := uu.ur.GetUserByEmail(&storedUser.Password, user.Email); err := nil {
+	storedUser := model.User()
+	if err := uu.ur.GetUserByEmail(&storedUser, user.Email); err := nil {
 		return "",err
 	}
-	err := bcrypt.CompareHashAndPassword([]byte(storeduser.Password), []byte(user.Password))
+	err := bcrypt.CompareHashAndPassword([]byte(storedUser.Password), []byte(user.Password))
 	if err!= nil{
 		return "", err
 	}
