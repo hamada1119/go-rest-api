@@ -65,3 +65,18 @@ func (tr *taskRepository) UpdatedTask(task *model.Task, userId uint, taskId uint
 	}
 	return nil
 }
+
+func (tr *taskRepository) DeletedTask(task *model.Task, userId uint, taskId uint) error {
+	result := tr.db.
+		Where("id=? and user_id=?", taskId, userId).
+		Delete(&model.Task{})
+
+	if result != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected < 1 {
+		return fmt.Errorf("object does not exist")
+	}
+	return nil
+}
