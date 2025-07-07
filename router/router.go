@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func NewRouter(uc controller.IUserController) *echo.Echo {
+func NewRouter(uc controller.IUserController, tc controller.ITaskController) *echo.Echo {
 	e := echo.New()
 	e.POST("/signup", uc.SignUp)
 	e.POST("/login", uc.LogIn)
@@ -18,5 +18,10 @@ func NewRouter(uc controller.IUserController) *echo.Echo {
 		SigningKey:  []byte(os.Getenv("SECRET")),
 		TokenLookup: "cookie:token",
 	}))
+	t.GET("", tc.GetAllTasks)
+	t.GET("./:taskId", tc.GetTaskById)
+	t.POST("./create", tc.CreateTask)
+	t.PUT("./update", tc.UpdateTask)
+	t.DELETE("./delete", tc.DeleteTask)
 	return e
 }
