@@ -6,10 +6,10 @@ import (
 )
 
 type ITaskUsecase interface {
-	GetAllTasks(userId uint) ([]model.TaksResponse, error)
-	GetTaskById(userId uint, taskId uint) (model.TaksResponse, error)
-	CreateTask(task model.Task) (model.TaksResponse, error)
-	UpdateTask(task model.Task, userId uint, taskId uint) (model.TaksResponse, error)
+	GetAllTasks(userId uint) ([]model.TaskResponse, error)
+	GetTaskById(userId uint, taskId uint) (model.TaskResponse, error)
+	CreateTask(task model.Task) (model.TaskResponse, error)
+	UpdateTask(task model.Task, userId uint, taskId uint) (model.TaskResponse, error)
 	DeleteTask(userId uint, taskId uint) error
 }
 
@@ -21,14 +21,14 @@ func NewTaskUsecase(tr repository.ITaskRepository) ITaskUsecase {
 	return &taskUsecase{tr}
 }
 
-func (tu *taskUsecase) GetAllTasks(userId uint) ([]model.TaksResponse, error) {
+func (tu *taskUsecase) GetAllTasks(userId uint) ([]model.TaskResponse, error) {
 	tasks := []model.Task{}
 	if err := tu.tr.GetAllTasks(&tasks, userId); err != nil {
 		return nil, err
 	}
-	resTasks := []model.TaksResponse{}
+	resTasks := []model.TaskResponse{}
 	for _, v := range tasks {
-		t := model.TaksResponse{
+		t := model.TaskResponse{
 			ID:        v.ID,
 			Title:     v.Title,
 			CreatedAt: v.CreatedAt,
@@ -40,12 +40,12 @@ func (tu *taskUsecase) GetAllTasks(userId uint) ([]model.TaksResponse, error) {
 
 }
 
-func (tu *taskUsecase) GetTaskById(userId uint, taskId uint) (model.TaksResponse, error) {
+func (tu *taskUsecase) GetTaskById(userId uint, taskId uint) (model.TaskResponse, error) {
 	task := model.Task{}
 	if err := tu.tr.GetTaskById(&task, userId, taskId); err != nil {
-		return model.TaksResponse{}, err
+		return model.TaskResponse{}, err
 	}
-	resTask := model.TaksResponse{
+	resTask := model.TaskResponse{
 		ID:        task.ID,
 		Title:     task.Title,
 		CreatedAt: task.CreatedAt,
@@ -54,11 +54,11 @@ func (tu *taskUsecase) GetTaskById(userId uint, taskId uint) (model.TaksResponse
 	return resTask, nil
 }
 
-func (tu *taskUsecase) CreateTask(task model.Task) (model.TaksResponse, error) {
+func (tu *taskUsecase) CreateTask(task model.Task) (model.TaskResponse, error) {
 	if err := tu.tr.CreateTask(&task); err != nil {
-		return model.TaksResponse{}, err
+		return model.TaskResponse{}, err
 	}
-	resTask := model.TaksResponse{
+	resTask := model.TaskResponse{
 		ID:        task.ID,
 		Title:     task.Title,
 		CreatedAt: task.CreatedAt,
@@ -67,11 +67,11 @@ func (tu *taskUsecase) CreateTask(task model.Task) (model.TaksResponse, error) {
 	return resTask, nil
 }
 
-func (tu *taskUsecase) UpdateTask(task model.Task, userId uint, taskId uint) (model.TaksResponse, error) {
+func (tu *taskUsecase) UpdateTask(task model.Task, userId uint, taskId uint) (model.TaskResponse, error) {
 	if err := tu.tr.UpdateTask(&task, userId, taskId); err != nil {
-		return model.TaksResponse{}, err
+		return model.TaskResponse{}, err
 	}
-	resTask := model.TaksResponse{
+	resTask := model.TaskResponse{
 		ID:        task.ID,
 		Title:     task.Title,
 		CreatedAt: task.CreatedAt,
