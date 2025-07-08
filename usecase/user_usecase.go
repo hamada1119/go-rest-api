@@ -1,5 +1,3 @@
-//外側の変更が内側に影響しないらしい。
-
 package usecase
 
 import (
