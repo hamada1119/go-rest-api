@@ -10,7 +10,7 @@ type User struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type UserResposen struct {
+type UserResponse struct {
 	ID    uint   `json:"int" gorm:"primaryKey"`
 	Email string `json:"email" gorm:"unique"`
 }

@@ -3,12 +3,15 @@ module go-rest-api
 go 1.24.4
 
 require (
+	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo-jwt/v4 v4.3.1
 	golang.org/x/crypto v0.38.0
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/gorm v1.30.0
 )
+
+require github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496 // indirect
 
 require (
 	github.com/golang-jwt/jwt/v5 v5.2.2
