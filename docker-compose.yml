@@ -11,5 +11,21 @@ services:
     restart: always
     networks:
       - lesson
+
+  go-app:
+    image: ryota1119/go-app:latest
+    ports:
+      - "4040:4040"
+    depends_on:
+      - dev-postgres
+    environment:
+      POSTGRES_HOST: dev-postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: udemy
+      POSTGRES_PW: udemy
+      POSTGRES_DB: udemy
+    networks:
+      - lesson
+  
 networks:
   lesson:
