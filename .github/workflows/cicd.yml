@@ -20,7 +20,7 @@ jobs:
       - name: Build Docker image
         run: docker build -t ryota1119/go-app .
       - name: Push Docker image
-        run: dokcer push ryota1119/go-app  
+        run: docker push ryota1119/go-app  
   
   deploy:
     needs: build
