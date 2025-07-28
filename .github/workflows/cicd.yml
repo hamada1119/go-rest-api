@@ -17,4 +17,18 @@ jobs:
         run: echo "PORT=${{ secrets.PORT }}" >> .env
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME  }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build Docker Image
+      - name: Build Docker image
+        run: docker build -t ryota1119/go-app .
+      - name: Push Docker image
+        run: dokcer push ryota1119/go-app  
+  
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull docker image
+        run: docker pull ryota1119/go-app:latest
+      - name: Delete old container
+        run: docker rum -f go-app
+      - name: Run docker container
+        run: docker run -d -p 4040:4040 --name go-app ryota1119/go-app:latest 
