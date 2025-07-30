@@ -24,6 +24,7 @@ services:
       POSTGRES_USER: udemy
       POSTGRES_PW: udemy
       POSTGRES_DB: udemy
+      GO_ENV: dev
     networks:
       - lesson
   
