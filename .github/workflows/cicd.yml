@@ -30,5 +30,8 @@ jobs:
         run: docker pull ryota1119/go-app:latest
       - name: Delete old container
         run: docker rm -f go-app-container
-      - name: Run docker container
-        run: docker run -d -p 4040:8080 --name go-app-container ryota1119/go-app:latest 
+      - name: Stop and remove existing containers
+        run: docker compose down || true
+
+      - name: Start containers with docker-compose
+        run: docker compose up -d --remove-orphans
