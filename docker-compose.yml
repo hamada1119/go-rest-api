@@ -15,7 +15,7 @@ services:
   go-app:
     image: ryota1119/go-app:latest
     ports:
-      - "4040:4040"
+      - "4040:8080"
     depends_on:
       - dev-postgres
     environment:
