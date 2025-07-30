@@ -3,11 +3,11 @@ services:
   dev-postgres:
     image: postgres:15.1-alpine
     ports:
-      - 5434:5432
+      - "5434:5432"
     environment:
-      POSTGRES_USER: udemy
-      POSTGRES_PASSWORD: udemy
-      POSTGRES_DB: udemy
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     restart: always
     networks:
       - lesson
@@ -18,15 +18,10 @@ services:
       - "4040:8080"
     depends_on:
       - dev-postgres
-    environment:
-      POSTGRES_HOST: dev-postgres
-      POSTGRES_PORT: 5432
-      POSTGRES_USER: udemy
-      POSTGRES_PW: udemy
-      POSTGRES_DB: udemy
-      GO_ENV: dev
+    env_file:
+      - .env
     networks:
       - lesson
-  
+
 networks:
   lesson:
