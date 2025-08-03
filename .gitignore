@@ -1,2 +1,6 @@
 .env
 ./postman-request
+
+nginx/certbot/conf/live/
+nginx/certbot/conf/archive/
+nginx/certbot/conf/renewal/
