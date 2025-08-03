@@ -13,6 +13,13 @@ jobs:
       - name: Checkout Source 
         uses: actions/checkout@v4
 
+      - name: Free up disk space
+        run: |
+          docker system prune -af
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
       - name: Create .env file
         run: echo "PORT=${{ secrets.PORT }}" >> .env
       - name: Login to docker hub
