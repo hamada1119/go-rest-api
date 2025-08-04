@@ -24,6 +24,8 @@ jobs:
           echo "GO_ENV=${{ secrets.GO_ENV }}" >> .env
           echo "API_DOMAIN=${{ secrets.API_DOMAIN }}" >> .env
           echo "FE_URL=${{ secrets.FE_URL }}" >> .env
+          echo "UID=${{ secrets.UID }}" >> .env
+          echo "GID=${{ secrets.GID }}" >> .env
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
