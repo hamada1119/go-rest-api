@@ -40,7 +40,7 @@ services:
 
   certbot:
     image: certbot/certbot
-    user: ec2-user
+    user: "${UID}:${GID}"
     volumes:
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
