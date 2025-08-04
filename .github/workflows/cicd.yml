@@ -7,11 +7,15 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted]
 
     steps:
       - name: Checkout Source 
         uses: actions/checkout@v4
+
+      - name: Docker Compose Up
+        run: docker-compose up -d --remove-orphans
+        working-directory: ./go-rest-api/go-rest-api
 
       - name: Free up disk space
         run: |
