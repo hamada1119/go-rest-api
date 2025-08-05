@@ -34,7 +34,7 @@ services:
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
     entrypoint: ["/bin/sh", "/docker-entrypoint.sh"] 
-    user: "${UID}:${GID}"
+    user: root
     depends_on:
       - go-app
     networks:
