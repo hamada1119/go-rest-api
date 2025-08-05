@@ -30,8 +30,10 @@ services:
       - "443:443"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/docker-entrypoint.sh:/docker-entrypoint.sh
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
+    entrypoint: ["/bin/sh", "/docker-entrypoint.sh"] 
     user: "${UID}:${GID}"
     depends_on:
       - go-app
