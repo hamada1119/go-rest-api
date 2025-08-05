@@ -22,7 +22,8 @@ services:
       - .env
     networks:
       - lesson
-
+    command: ["/bin/sh", "-c", "/app/wait-for-it.sh dev-postgres:5432 -- ./main"]
+  
   nginx:
     image: nginx:alpine
     ports:
