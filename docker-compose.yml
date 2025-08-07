@@ -24,6 +24,11 @@ services:
       - lesson
     command: ["/bin/sh", "-c", "/app/wait-for-it.sh dev-postgres:5432 -- ./main"]
   
+  migrate:
+    build: .
+    command: go run migrate/migrate.go
+    depends_on:
+      - db
   nginx:
     image: nginx:alpine
     ports:
