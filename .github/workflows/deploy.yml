@@ -72,7 +72,7 @@ jobs:
         run: docker pull ryota1119/go-app:latest
 
       - name: Stop stack
-        run: docker compose down || true
+        run: docker-compose down || true
 
       - name: Start stack
-        run: docker compose up -d --remove-orphans
+        run: docker-compose up -d --remove-orphans
