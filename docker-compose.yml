@@ -27,8 +27,13 @@ services:
   migrate:
     build: .
     command: go run migrate/migrate.go
+    env_file:
+      - .env
     depends_on:
-      - db
+      dev-postgres:
+        condition: service_healthy
+    networks:
+      - lesson
   nginx:
     image: nginx:alpine
     ports:
