@@ -2,62 +2,77 @@ name: Deploy Go Application
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: [self-hosted]
-
     steps:
-      - name: Make certbot dir writable
-        run: sudo chown -R ec2-user:ec2-user ./go-rest-api/go-rest-api/nginx/certbot/conf || true
+      - name: Fix certbot perms before checkout
+        run: |
+          sudo chown -R ec2-user:ec2-user /home/ec2-user/actions-runner/_work/go-rest-api/go-rest-api/nginx/certbot || true
+          sudo chmod -R u+rwX,g+rwX,o+rwX /home/ec2-user/actions-runner/_work/go-rest-api/go-rest-api/nginx/certbot || true
 
-      - name: Checkout Source 
+      - name: Checkout Source
         uses: actions/checkout@v4
 
-      - name: Create .env file
-        run: |
-          echo "PORT=${{ secrets.PORT }}" >> .env
-          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
-          echo "POSTGRES_PW=${{ secrets.POSTGRES_PW }}" >> .env
-          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PW }}" >> .env
-          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
-          echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> .env
-          echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}" >> .env
-          echo "SECRET=${{ secrets.SECRET }}" >> .env
-          echo "GO_ENV=${{ secrets.GO_ENV }}" >> .env
-          echo "API_DOMAIN=${{ secrets.API_DOMAIN }}" >> .env
-          echo "FE_URL=${{ secrets.FE_URL }}" >> .env
-          echo "UID=${{ secrets.UID }}" >> .env
-          echo "GID=${{ secrets.GID }}" >> .env
-
       - name: Login to Docker Hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME  }} -p ${{ secrets.DOCKER_PASSWORD }}
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build Docker image
-        run: docker build -t ryota1119/go-app .
-
-      - name: Push Docker image
-        run: docker push ryota1119/go-app
-
-      - name: Free up disk space
+      - name: Build & Push Docker image
         run: |
-          docker system prune -af
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /opt/ghc
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          docker build -t ryota1119/go-app .
+          docker push ryota1119/go-app
+
+      - name: Free up disk space (optional)
+        run: |
+          docker system prune -af || true
 
   deploy:
     needs: build
     runs-on: [self-hosted]
-
+    
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}  
+    
     steps:
+      - name: Fix certbot perms before checkout
+        run: |
+          sudo chown -R ec2-user:ec2-user ./nginx/certbot || true
+          sudo chmod -R u+rwX,g+rwX,o+rwX ./nginx/certbot || true
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Ensure certbot dirs
+        run: |
+          mkdir -p ./nginx/certbot/conf ./nginx/certbot/www ./nginx/certbot/log ./nginx/certbot/lib
+          sudo chown -R ec2-user:ec2-user ./nginx/certbot
+          chmod -R 775 ./nginx/certbot
+
+      - name: Create .env for runtime
+        run: |
+          cat > .env <<EOF
+          PORT=${{ secrets.PORT }}
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PW }}
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
+          POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}
+          SECRET=${{ secrets.SECRET }}
+          GO_ENV=${{ secrets.GO_ENV }}
+          API_DOMAIN=${{ secrets.API_DOMAIN }}  
+          FE_URL=${{ secrets.FE_URL }}
+          UID=${{ secrets.UID }}
+          GID=${{ secrets.GID }}
+          EOF
+
       - name: Pull latest image
         run: docker pull ryota1119/go-app:latest
 
-      - name: Stop and remove existing containers
+      - name: Stop stack
         run: docker compose down || true
 
-      - name: Start containers with docker-compose
-        run: docker-compose up -d --remove-orphans
+      - name: Start stack
+        run: docker compose up -d --remove-orphans
