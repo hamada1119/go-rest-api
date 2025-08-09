@@ -67,10 +67,15 @@ jobs:
           UID=${{ secrets.UID }}
           GID=${{ secrets.GID }}
           EOF
-
-      - name: Pull latest image
-        run: docker pull ryota1119/go-app:latest
-
+      
+      - name: Pull latest image if not present
+        run: |
+          if ! docker image inspect ryota1119/go-app:latest > /dev/null 2>&1; then
+          docker pull ryota1119/go-app:latest
+          else
+          echo "Image already exists locally. Skipping pull."
+          fi
+      
       - name: Stop stack
         run: docker-compose down || true
 
