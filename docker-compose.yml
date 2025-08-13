@@ -17,6 +17,8 @@ services:
       timeout: 5s
       retries: 10
       start_period: 20s
+    volumes:
+      - pg-data:/var/lib/postgresql/data
 
   go-app:
     image: ryota1119/go-app:latest
