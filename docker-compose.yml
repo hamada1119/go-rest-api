@@ -51,9 +51,10 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./nginx/certbot/conf:/etc/letsencrypt:ro
-      - ./nginx/certbot/www:/var/www/certbot:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/docker-entrypoint.sh:/docker-entrypoint.sh
+      - /srv/letsencrypt/conf:/etc/letsencrypt
+      - /srv/letsencrypt/www:/var/www/certbot
     depends_on:
       - go-app
     networks:
@@ -63,10 +64,10 @@ services:
     image: certbot/certbot
     user: "${UID:-1000}:${GID:-1000}"
     volumes:
-      - ./nginx/certbot/conf:/etc/letsencrypt
-      - ./nginx/certbot/www:/var/www/certbot
-      - ./nginx/certbot/log:/var/log/letsencrypt
-      - ./nginx/certbot/lib:/var/lib/letsencrypt
+      - /srv/letsencrypt/conf:/etc/letsencrypt
+      - /srv/letsencrypt/www:/var/www/certbot
+      - /srv/letsencrypt/log:/var/log/letsencrypt
+      - /srv/letsencrypt/lib:/var/lib/letsencrypt
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 24h & wait $${!}; done;'"
     networks:
       - lesson
