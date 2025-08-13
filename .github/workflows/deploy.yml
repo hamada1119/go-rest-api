@@ -13,6 +13,12 @@ jobs:
           sudo chown -R ec2-user:ec2-user /home/ec2-user/actions-runner/_work/go-rest-api/go-rest-api/nginx/certbot || true
           sudo chmod -R u+rwX,g+rwX,o+rwX /home/ec2-user/actions-runner/_work/go-rest-api/go-rest-api/nginx/certbot || true
 
+      - name: Make pg-data removable before checkout
+        run: |
+          sudo chattr -i ./pg-data 2>/dev/null || true
+          sudo chown -R ec2-user:ec2-user ./pg-data 2>/dev/null || true
+          sudo rm -rf ./pg-data || true
+
       - name: Checkout Source
         uses: actions/checkout@v4
 
