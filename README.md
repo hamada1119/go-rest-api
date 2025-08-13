@@ -1,10 +1,9 @@
 # 技術スタック
-- フロントエンド: Next.js, TypeScript, React(MUI)
 - バックエンド: Go(golang)
 - データベース: PostgreSQL (Docker コンテナ)
 - Web サーバー/リバースプロキシ: Nginx
 - SSL/TLS 証明書: Let’s Encrypt (certbot)
-- インフラ: AWS EC2, Vercel
+- インフラ: AWS EC2
 - コンテナ管理: Docker / docker-compose
 - CI/CD: GitHub Actions
 
