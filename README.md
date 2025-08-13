@@ -1,5 +1,5 @@
 # 技術スタック
-- フロントエンド: Next.js, TypeScript, React
+- フロントエンド: Next.js, TypeScript, React(MUI)
 - バックエンド: Go(golang)
 - データベース: PostgreSQL (Docker コンテナ)
 - Web サーバー/リバースプロキシ: Nginx
@@ -9,7 +9,7 @@
 - CI/CD: GitHub Actions
 
 # 目的
-- 本リポジトリはToDoアプリの開発の通じて、Go 言語と Docker を中心にインフラ構築・運用のキャッチアップを目的として作成
+- 本リポジトリはToDoアプリの開発を通じて、Go 言語と Docker を中心にインフラ構築・運用のキャッチアップを目的として作成
 - 特に以下のスキルを中心に学習
 	1.	Docker を用いたマルチコンテナ構成（Go / PostgreSQL / Nginx の連携）
 	2.	SSL 化による HTTPS 通信の構築（Let’s Encrypt を利用）
