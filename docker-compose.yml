@@ -51,8 +51,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      # - ./nginx/docker-entrypoint.sh:/docker-entrypoint.sh
       - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/docker-entrypoint.sh:/docker-entrypoint.sh
       - /srv/letsencrypt/conf:/etc/letsencrypt
       - /srv/letsencrypt/www:/var/www/certbot
     depends_on:
